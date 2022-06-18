@@ -4,6 +4,7 @@ import createCard from './createCard';
 import createList from './createList';
 import {fetchCountries} from './fetchCountries';
 
+var  debounce  = require ('lodash.debounce');
 
 const DEBOUNCE_DELAY = 300;
 
@@ -12,18 +13,18 @@ const refs = {
     ulEl: document.querySelector('.country-list'),
     cardEl: document.querySelector('.country-info'),
 };
-console.dir(refs.inputEl);
-console.dir(refs.ulEl);
-console.dir(refs.cardEl);
+
 refs.inputEl.value = 's';
 
-refs.inputEl.addEventListener('input', countrySearch);
+refs.inputEl.addEventListener('input', debounce(countrySearch, DEBOUNCE_DELAY));
 
 function countrySearch(e){
     const name = e.target.value;
-    // console.log(name.length);
-    fetchCountries(name)
-    .then((countrys)=>{
+    if (name == ""){
+        return;
+    }
+    
+    fetchCountries(name).then((countrys)=>{
         console.log(countrys);
         if (countrys.length > 10){
             Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
@@ -36,7 +37,6 @@ function countrySearch(e){
         renderList(createList(countrys));
     })
     .catch((error) => console.log(error));
-
 };
 
 function renderCard(markup){
@@ -48,3 +48,8 @@ function renderList(markup){
     refs.ulEl.innerHTML = markup;
     refs.cardEl.innerHTML = "";
 };
+
+
+function consoleLog(){
+    console.log('qweqwe');
+}
