@@ -12,9 +12,52 @@ body {
   line-height: 1.5;
 }
 
+ul{
+  padding: 0;
+}
+
+span{
+  font-weight: 400;
+}
+
 #search-box {
   font: inherit;
   padding: 8px;
   max-width: 320px;
   margin-bottom: 16px;
 }
+
+.title-block{
+  display: flex;
+  align-items: center;
+  /* padding-left: 40px; */
+}
+
+.imgFlag{
+  width: 40px;
+  padding: 10px, 10px, 10px, 0;
+  margin-right: 10px;
+}
+
+.title-text{
+  margin: 10px;
+}
+
+.listOfProperties{
+  list-style: none;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.19;
+}
+
+/* .properties{
+  margin-left: 10px;
+} */
+
+.properties:not(:last-child){
+  margin-bottom: 10px;
+}
+
+
+
+
