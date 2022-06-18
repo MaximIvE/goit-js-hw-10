@@ -24,7 +24,8 @@ function countrySearch(e){
         clean();
     }else{
         fetchCountries(name).then((countrys)=>{
-            console.log(countrys);
+            console.log("countrys, ", countrys);
+            
             if (countrys.length > 10){
                 Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
                 return;
@@ -35,7 +36,11 @@ function countrySearch(e){
             };
             renderList(createList(countrys));
         })
-        .catch((error) => console.log(error));
+        .catch((error)=>{
+            if (error.message == '404'){
+                Notiflix.Notify.failure('Oops, there is no country with that name');
+            }
+        });
     }
 };
 
@@ -48,7 +53,6 @@ function renderList(markup){
     refs.ulEl.innerHTML = markup;
     refs.cardEl.innerHTML = "";
 };
-
 
 function clean(){
     refs.ulEl.innerHTML = "";
