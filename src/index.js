@@ -19,24 +19,24 @@ refs.inputEl.value = 's';
 refs.inputEl.addEventListener('input', debounce(countrySearch, DEBOUNCE_DELAY));
 
 function countrySearch(e){
-    const name = e.target.value;
+    const name = e.target.value.trim();
     if (name == ""){
-        return;
+        clean();
+    }else{
+        fetchCountries(name).then((countrys)=>{
+            console.log(countrys);
+            if (countrys.length > 10){
+                Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+                return;
+            };
+            if (countrys.length ==1){
+                renderCard(createCard(countrys));
+                return;
+            };
+            renderList(createList(countrys));
+        })
+        .catch((error) => console.log(error));
     }
-    
-    fetchCountries(name).then((countrys)=>{
-        console.log(countrys);
-        if (countrys.length > 10){
-            Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
-            return;
-        };
-        if (countrys.length ==1){
-            renderCard(createCard(countrys));
-            return;
-        };
-        renderList(createList(countrys));
-    })
-    .catch((error) => console.log(error));
 };
 
 function renderCard(markup){
@@ -50,6 +50,7 @@ function renderList(markup){
 };
 
 
-function consoleLog(){
-    console.log('qweqwe');
-}
+function clean(){
+    refs.ulEl.innerHTML = "";
+    refs.cardEl.innerHTML = "";
+};
