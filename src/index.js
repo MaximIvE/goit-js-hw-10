@@ -4,9 +4,15 @@ import createCard from './createCard';
 import createList from './createList';
 import {fetchCountries} from './fetchCountries';
 
-var  debounce  = require ('lodash.debounce');
+// var  debounce  = require ('lodash.debounce');
+var  _  = require ('lodash');
 
 const DEBOUNCE_DELAY = 300;
+const notiflyParams = {
+    showOnlyTheLastOne: true,
+    clickToClose: true,
+    cssAnimationDuration: 500, 
+}
 
 const refs = {
     inputEl: document.querySelector('#search-box'),
@@ -14,9 +20,7 @@ const refs = {
     cardEl: document.querySelector('.country-info'),
 };
 
-refs.inputEl.value = 's';
-
-refs.inputEl.addEventListener('input', debounce(countrySearch, DEBOUNCE_DELAY));
+refs.inputEl.addEventListener('input', _.debounce(countrySearch, DEBOUNCE_DELAY));
 
 function countrySearch(e){
     const name = e.target.value.trim();
@@ -24,21 +28,19 @@ function countrySearch(e){
         clean();
     }else{
         fetchCountries(name).then((countrys)=>{
-            console.log("countrys, ", countrys);
-            
             if (countrys.length > 10){
-                Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+                Notiflix.Notify.info('Too many matches found. Please enter a more specific name.', notiflyParams);
                 return;
             };
-            if (countrys.length ==1){
+            if (countrys.length == 1){
                 renderCard(createCard(countrys));
-                return;
-            };
-            renderList(createList(countrys));
+            }else{
+                renderList(createList(countrys));
+            }
         })
         .catch((error)=>{
             if (error.message == '404'){
-                Notiflix.Notify.failure('Oops, there is no country with that name');
+                Notiflix.Notify.failure('Oops, there is no country with that name', notiflyParams);
             }
         });
     }
